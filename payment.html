@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .payment_section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .payment_section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .payment_details h3 {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .input-field:focus {
+            border-color: #007BFF;
+        }
+
+        /* Button styles */
+        #pay-now-button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        #pay-now-button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        #pay-now-button:active {
+            background-color: #1e7e34;
+            transform: scale(1);
+        }
+
+        /* Notification popup styles */
+        .notification {
+            display: none;
+            padding: 15px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="payment_section">
+        <h1>Payment</h1>
+
+        <!-- Payment Form -->
+        <form id="payment-form">
+            <div class="payment_details">
+                <!-- Dynamic Product Name and Price -->
+                <h3>Product: <span id="product-name">Loading...</span></h3>
+                <h3>Price: RM <span id="product-price">0</span></h3>
+
+                <!-- Name Input -->
+                <input type="text" id="name" class="input-field" placeholder="Full Name" required>
+
+                <!-- Email Input -->
+                <input type="email" id="email" class="input-field" placeholder="Email Address" required>
+
+                <!-- Card Number Input (Mock) -->
+                <input type="text" id="card" class="input-field" placeholder="Card Number" required>
+
+                <!-- Expiry Date Input -->
+                <input type="text" id="expiry" class="input-field" placeholder="Expiry Date (MM/YY)" required>
+
+                <!-- CVV Input -->
+                <input type="text" id="cvv" class="input-field" placeholder="CVV" required>
+
+                <button type="submit" id="pay-now-button">Pay Now</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Success Notification -->
+    <div class="notification" id="payment-success-notification">
+        Payment Successful!
+    </div>
+
+    <script>
+        // Read query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('productName');
+        const productPrice = urlParams.get('productPrice');
+
+        // Set the product name and price dynamically on the page
+        document.getElementById('product-name').textContent = productName || 'Unknown Product';
+        document.getElementById('product-price').textContent = productPrice || '0';
+
+        // Handle form submission
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent actual form submission
+
+            // Validate form fields
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const card = document.getElementById('card').value;
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+
+            if (name && email && card && expiry && cvv) {
+                // If all fields are filled, show the success notification
+                const notification = document.getElementById('payment-success-notification');
+                notification.style.display = 'block';
+
+                // Hide the notification after 3 seconds
+                setTimeout(function() {
+                    notification.style.display = 'none';
+                }, 3000);  // 3 seconds
+
+                // Redirect to index.html after 4 seconds
+                setTimeout(function() {
+                    window.location.href = 'index.html'; // Redirect to homepage
+                }, 4000);  // 4 seconds delay before redirect
+            } else {
+                // If any field is missing, show a message (you can also add validation errors)
+                alert('Please fill out all fields correctly.');
+            }
+        });
+    </script>
+
+</body>
+</html>

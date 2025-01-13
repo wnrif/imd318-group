@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .checkout_section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .checkout_section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .checkout_details h3 {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .checkout_details span {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        /* Button styles */
+        #confirm-purchase {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        #confirm-purchase:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        #confirm-purchase:active {
+            background-color: #1e7e34;
+            transform: scale(1);
+        }
+
+        /* Loader animation */
+        .loader {
+            display: none;
+            margin-top: 20px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="checkout_section">
+        <h1>Checkout</h1>
+        <div class="checkout_details">
+            <h3>Product: <span id="product-name">Loading...</span></h3>
+            <h3>Price: <span id="product-price">Loading...</span></h3>
+            <button id="confirm-purchase">Confirm Purchase</button>
+            <div class="loader" id="loader"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters (search params) from the previous page if any
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Retrieve product name and price from URL parameters
+            const productName = urlParams.get('productName');
+            const productPrice = urlParams.get('productPrice');
+            
+            // Update the page with the product details
+            document.getElementById('product-name').textContent = productName || 'N/A';
+            document.getElementById('product-price').textContent = productPrice ? 'RM ' + productPrice : 'RM 0';
+
+            // Handle "Confirm Purchase" button click
+            const confirmButton = document.getElementById('confirm-purchase');
+            confirmButton.addEventListener('click', function() {
+                // Show loader animation and disable the button
+                const loader = document.getElementById('loader');
+                loader.style.display = 'inline-block';
+                confirmButton.disabled = true;
+                confirmButton.textContent = 'Processing...';
+
+                // Simulate a network request (2 seconds)
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                    confirmButton.textContent = 'Confirmed!';
+                    confirmButton.style.backgroundColor = '#007bff'; // Change color to indicate success
+
+                    // Redirect to the payment page (payment.html) with product details
+                    const paymentUrl = `payment.html?productName=${encodeURIComponent(productName)}&productPrice=${encodeURIComponent(productPrice)}`;
+                    
+                    // Wait for 1 second before redirecting
+                    setTimeout(function() {
+                        window.location.href = paymentUrl; // Redirect to payment page
+                    }, 1000); // 1-second delay before redirect
+                }, 2000); // 2-second delay simulation
+            });
+        });
+    </script>
+
+</body>
+</html>
